@@ -12,7 +12,7 @@ using Xunit;
 
 namespace XUnitTest.Remoting;
 
-[TestCaseOrderer("NewLife.UnitTest.DefaultOrderer", "NewLife.UnitTest")]
+[TestCaseOrderer("NewLife.UnitTest.DefaultOrderer", "DH.UnitTest")]
 public class ApiTest : DisposeBase
 {
     private static ApiServer _Server;
