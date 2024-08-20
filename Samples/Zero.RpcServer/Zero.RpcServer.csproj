@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DH.NCode" Version="3.7.2024.819-beta1213" />
+    <PackageReference Include="DH.NCode" Version="3.7.2024.820" />
     <PackageReference Include="NewLife.Redis" Version="5.7.2024.801" />
     <PackageReference Include="NewLife.Stardust" Version="3.0.2024.802" />
   </ItemGroup>
