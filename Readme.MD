@@ -6,8 +6,8 @@
 
 参考目录：
 
-- [Remoting接口文档](doc/RemotingAPI.md)
-- [SRMP简易远程消息协议](doc/srmp.md)
+- [Remoting接口文档](Doc/RemotingApi.MD)
+- [SRMP简易远程消息协议](Doc/SRMP.MD)
 
 
 
