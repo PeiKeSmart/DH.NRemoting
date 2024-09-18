@@ -98,10 +98,6 @@ public class ClientPoolCluster<T> : ICluster<String, T> where T : class
         }
 
         protected override T OnCreate() => Host.CreateClient();
-
-        /// <summary>释放时，返回是否有效。无效对象将会被抛弃</summary>
-        /// <param name="value"></param>
-        protected override Boolean OnPut(T value) => value != null && (value is not IDisposable2 ds || !ds.Disposed);
     }
 
     #region 日志
