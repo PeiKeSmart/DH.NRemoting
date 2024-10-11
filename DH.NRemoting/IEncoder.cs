@@ -97,7 +97,7 @@ public abstract class EncoderBase
         // 参数或结果。长度部分定长4字节
         if (value != null) writer.Write(value.Total);
 
-        pk = pk.Slice(8, writer.Position - 8);
+        pk = pk.Slice(8, writer.Position - 8) as OwnerPacket;
         if (value != null) pk.Next = value;
 
         return pk;
