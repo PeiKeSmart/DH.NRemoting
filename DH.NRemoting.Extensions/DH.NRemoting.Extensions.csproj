@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
     <AssemblyTitle>协议通信扩展库</AssemblyTitle>
     <Description>提供WebApi应用级服务端</Description>
     <Company>湖北登灏科技有限公司</Company>
