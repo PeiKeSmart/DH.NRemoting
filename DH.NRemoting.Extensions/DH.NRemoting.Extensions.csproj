@@ -18,6 +18,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <NoWarn>1701;1702;NU5104;NETSDK1138;CS7035</NoWarn>
+
+    <!--禁止生成launchSettings.json-->
+    <NoDefaultLaunchSettingsFile>True</NoDefaultLaunchSettingsFile>
   </PropertyGroup>
 
   <PropertyGroup>
