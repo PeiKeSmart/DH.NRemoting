@@ -49,6 +49,9 @@ public abstract class ClientBase : DisposeBase, IApiClient, ICommandClient, IEve
     /// <summary>密钥。设备密钥DeviceSecret，或应用密钥AppSecret</summary>
     public String? Secret { get; set; }
 
+    /// <summary>调用超时时间。请求发出后，等待响应的最大时间，默认15_000ms</summary>
+    public Int32 Timeout { get; set; } = 15_000;
+
     /// <summary>密码提供者</summary>
     /// <remarks>
     /// 用于保护密码传输，默认提供者为空，密码将明文传输。
@@ -222,6 +225,7 @@ public abstract class ClientBase : DisposeBase, IApiClient, ICommandClient, IEve
     {
         JsonHost = JsonHost,
         DefaultUserAgent = $"{_name}/v{_version}",
+        Timeout = Timeout,
         Log = Log,
     };
 
@@ -236,6 +240,7 @@ public abstract class ClientBase : DisposeBase, IApiClient, ICommandClient, IEve
             Servers = urls.Split(","),
             JsonHost = JsonHost,
             ServiceProvider = ServiceProvider,
+            Timeout = Timeout,
             Log = Log
         };
         client.Received += (s, e) =>
@@ -257,7 +262,7 @@ public abstract class ClientBase : DisposeBase, IApiClient, ICommandClient, IEve
     {
         public ClientBase Client { get; set; } = null!;
 
-        protected override async Task<Object?> OnLoginAsync(ISocketClient client, Boolean force) => await InvokeWithClientAsync<Object>(client, Client.Actions[Features.Login], Client.BuildLoginRequest());
+        protected override async Task<Object?> OnLoginAsync(ISocketClient client, Boolean force, CancellationToken cancellationToken) => await InvokeWithClientAsync<Object>(client, Client.Actions[Features.Login], Client.BuildLoginRequest(), 0, cancellationToken);
     }
 
     /// <summary>异步调用。HTTP默认POST，自动识别GET</summary>
@@ -368,7 +373,11 @@ public abstract class ClientBase : DisposeBase, IApiClient, ICommandClient, IEve
     /// <param name="args"></param>
     /// <returns></returns>
     [return: MaybeNull]
-    public virtual TResult Invoke<TResult>(String action, Object? args = null) => TaskEx.Run(() => InvokeAsync<TResult>(action, args)).Result;
+    public virtual TResult Invoke<TResult>(String action, Object? args = null)
+    {
+        using var source = new CancellationTokenSource(Timeout);
+        return InvokeAsync<TResult>(action, args, source.Token).GetAwaiter().GetResult();
+    }
 
     /// <summary>设置令牌。派生类可重定义逻辑</summary>
     /// <param name="token"></param>
@@ -432,10 +441,11 @@ public abstract class ClientBase : DisposeBase, IApiClient, ICommandClient, IEve
         if (Status == LoginStatus.LoggedIn) return null;
         if (Status == LoginStatus.LoggingIn)
         {
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < 50; i++)
             {
                 await TaskEx.Delay(100);
                 if (Status == LoginStatus.LoggedIn) return null;
+                if (Status != LoginStatus.LoggingIn) break;
             }
         }
 
@@ -467,6 +477,7 @@ public abstract class ClientBase : DisposeBase, IApiClient, ICommandClient, IEve
         }
         catch (Exception ex)
         {
+            Status = LoginStatus.Ready;
             span?.SetError(ex, null);
             throw;
         }
