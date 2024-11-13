@@ -64,3 +64,5 @@
 1. 客户端HttpDevice继承自ClientBase，通过Http/Https协议连接服务端WebApi，进行登录、注销、心跳和更新等操作。
 2. 客户端使用设备DeviceCode和DeviceSecret登录，获得令牌，后续每次请求头都需要带上令牌。
 3. 在心跳时检测并维持WebSocket长连接。
+
+各项目默认支持net9.0/netstandard2.1/netstandard2.0/net4.5

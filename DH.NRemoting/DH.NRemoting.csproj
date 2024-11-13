@@ -5,7 +5,7 @@
     <Description>提供高性能RPC客户端服务端，提供Http/WebSocket客户端服务端，提供应用级客户端</Description>
     <Company>湖北登灏科技有限公司</Company>
     <Copyright>©2020-2024 湖北登灏科技有限公司</Copyright>
-    <VersionPrefix>3.91</VersionPrefix>
+    <VersionPrefix>4.00</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
     <FileVersion>$(Version)</FileVersion>
@@ -62,7 +62,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DH.NCore" Version="3.91.2024.1112-beta0554" />
+    <PackageReference Include="DH.NCore" Version="4.0.2024.1113-beta0614" />
   </ItemGroup>
 
 </Project>
