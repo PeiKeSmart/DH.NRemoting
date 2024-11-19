@@ -21,8 +21,8 @@
 
   <ItemGroup>
     <PackageReference Include="DH.NCode" Version="4.0.2024.1119-beta0609" />
-    <PackageReference Include="DH.NRedis" Version="3.91.2024.1109-beta0248" />
-    <PackageReference Include="DH.NStardust" Version="3.91.2024.1109-beta1500" />
+    <PackageReference Include="DH.NRedis" Version="4.0.2024.1119-beta0731" />
+    <PackageReference Include="DH.NStardust" Version="4.0.2024.1119-beta0726" />
   </ItemGroup>
 
   <ItemGroup>
