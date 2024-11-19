@@ -871,7 +871,6 @@ public abstract class ClientBase : DisposeBase, IApiClient, ICommandClient, IEve
         var name = asm.GetName().Name;
         if (name.IsNullOrEmpty()) return;
 
-        // 重新拉起进程
         // 重新拉起进程。对于大多数应用，都是拉起新进程，然后退出当前进程；对于星尘代理，通过新进程来重启服务。
         var args = Environment.GetCommandLineArgs();
         if (args == null || args.Length == 0) args = new String[1];
