@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text;
 using NewLife.Data;
 using NewLife.Log;
 using NewLife.Net;
@@ -41,6 +42,10 @@ internal class Program
 
         var rs = client.Invoke<Int32>("Big/Sum", new { a = 123, b = 456 });
         XTrace.WriteLine("{0}+{1}={2}", 123, 456, rs);
+
+        //Big Json Test 当返回值json超级大10MB 报错：System.Exception:“解码错误，无法找到服务名！” 小json一切正常
+        var resBigJsonTest = client.Invoke<String>("Big/BigJsonTest");
+        XTrace.WriteLine($"resBigJsonTest.Length={resBigJsonTest.Length}");
     }
 
     class MyClient : ApiClient
@@ -66,11 +71,30 @@ internal class Program
         }
         public String ToUpper(String str) => str.ToUpper();
 
+
         public IPacket Test(IPacket pk)
         {
             var buf = pk.ReadBytes().Select(e => (Byte)(e ^ 'x')).ToArray();
 
             return (ArrayPacket)buf;
+        }
+        /// <summary>
+        /// 当循环1000次 拼接 就报错超时了， System.TimeoutException:“请求[Big/BigJsonTest]超时(01 Seq=02 [32](8, 16)<16>)！”
+        /// 当循环10次拼接  正常
+        /// </summary>
+        /// <returns></returns>
+        public string BigJsonTest()
+        {
+            StringBuilder sb = new StringBuilder();
+            //拼接10万次   就报错了
+            for (int i = 0; i < 100; i++)
+            {
+                sb.AppendLine("big json big json big json big json big json big json big json big json big json big json big json big json big json big json big json big json big json big json big json ");
+            }
+            string str = sb.ToString();
+            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "bigJsonTest.txt", str);
+            Console.WriteLine($"sb.Length={str.Length}");
+            return str;
         }
     }
 }
