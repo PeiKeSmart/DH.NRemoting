@@ -26,12 +26,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NewLife.Stardust" Version="3.1.2024.1004" />
-    <PackageReference Include="System.Speech" Version="8.0.0" />
+    <PackageReference Include="DH.NStardust" Version="4.0.2024.1126-beta0228" />
+    <PackageReference Include="System.Speech" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NewLife.Remoting\NewLife.Remoting.csproj" />
+    <ProjectReference Include="..\..\DH.NRemoting\DH.NRemoting.csproj" />
   </ItemGroup>
 
 </Project>

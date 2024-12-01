@@ -16,6 +16,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <NoWarn>1701;1702;NU5104;NETSDK1138;CS7035</NoWarn>
+    <WarningsAsErrors>CA2007</WarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -62,7 +63,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DH.NCore" Version="4.0.2024.1126-beta0132" />
+    <PackageReference Include="DH.NCore" Version="4.0.2024.1201-beta0217" />
   </ItemGroup>
 
 </Project>
