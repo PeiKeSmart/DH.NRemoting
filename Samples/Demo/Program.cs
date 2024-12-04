@@ -85,13 +85,13 @@ internal class Program
         /// <returns></returns>
         public string BigJsonTest()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             //拼接10万次   就报错了
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 10000; i++)
             {
                 sb.AppendLine("big json big json big json big json big json big json big json big json big json big json big json big json big json big json big json big json big json big json big json ");
             }
-            string str = sb.ToString();
+            var str = sb.ToString();
             File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "bigJsonTest.txt", str);
             Console.WriteLine($"sb.Length={str.Length}");
             return str;
