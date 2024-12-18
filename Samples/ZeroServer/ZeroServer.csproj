@@ -19,9 +19,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DH.NCube.Core" Version="4.0.2024.1204-beta0344" />
-    <PackageReference Include="DH.NRedis" Version="4.0.2024.1206-beta0112" />
-    <PackageReference Include="DH.NStardust.Extensions" Version="4.0.2024.1204-beta0331" />
+    <PackageReference Include="DH.NCube.Core" Version="4.0.2024.1213-beta1053" />
+    <PackageReference Include="DH.NRedis" Version="4.0.2024.1213-beta1019" />
+    <PackageReference Include="DH.NStardust.Extensions" Version="4.0.2024.1216-beta0145" />
   </ItemGroup>
 
   <ItemGroup>
