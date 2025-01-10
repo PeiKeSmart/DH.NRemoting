@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using IoT.Data;
+
+using NewLife;
 using NewLife.Cube;
 using NewLife.Log;
 using NewLife.Web;
