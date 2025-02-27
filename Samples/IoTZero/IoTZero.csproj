@@ -23,7 +23,7 @@
     <PackageReference Include="DH.NIoT" Version="4.0.2025.205-beta0531" />
     <PackageReference Include="DH.NMQTT" Version="4.0.2025.211-beta0852" />
     <PackageReference Include="DH.NRedis" Version="4.1.2025.217-beta0712" />
-    <PackageReference Include="DH.NStardust.Extensions" Version="4.0.2025.212-beta0804" />
+    <PackageReference Include="DH.NStardust.Extensions" Version="4.0.2025.222-beta0206" />
   </ItemGroup>
 
   <ItemGroup>
