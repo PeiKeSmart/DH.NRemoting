@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-
 using NewLife;
 using NewLife.Model;
 using NewLife.Remoting.Clients;

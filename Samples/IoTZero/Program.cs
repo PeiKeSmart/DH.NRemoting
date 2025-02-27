@@ -4,7 +4,6 @@ using NewLife.Cube;
 using NewLife.Log;
 using NewLife.Reflection;
 using NewLife.Remoting.Extensions;
-
 using XCode;
 
 // 日志输出到控制台，并拦截全局异常

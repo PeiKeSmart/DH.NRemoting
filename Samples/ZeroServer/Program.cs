@@ -57,7 +57,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=CubeHome}/{action=Index}/{id?}");
 
-app.RegisterService("ZeroServer", null, app.Environment.EnvironmentName);
+app.RegisterService(star.AppId, null, app.Environment.EnvironmentName);
 
 // 反射查找并调用客户端测试，该代码仅用于测试，实际项目中不要这样做
 var clientType = "ZeroClient.ClientTest".GetTypeEx();
