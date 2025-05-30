@@ -20,10 +20,10 @@
 
   <ItemGroup>
     <PackageReference Include="DH.NCube.Core" Version="4.11.2025.506-beta1241" />
-    <PackageReference Include="DH.NIoT" Version="4.12.2025.506" />
-    <PackageReference Include="DH.NMQTT" Version="4.11.2025.518-beta1352" />
+    <PackageReference Include="DH.NIoT" Version="4.12.2025.530-beta0135" />
+    <PackageReference Include="DH.NMQTT" Version="4.12.2025.520-beta0613" />
     <PackageReference Include="DH.NRedis" Version="4.12.2025.514-beta0916" />
-    <PackageReference Include="DH.NStardust.Extensions" Version="4.12.2025.514-beta0908" />
+    <PackageReference Include="DH.NStardust.Extensions" Version="4.12.2025.520-beta0330" />
   </ItemGroup>
 
   <ItemGroup>
