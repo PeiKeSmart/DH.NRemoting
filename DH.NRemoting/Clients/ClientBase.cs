@@ -4,7 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Reflection;
+
 using NewLife.Caching;
 using NewLife.Data;
 using NewLife.Log;
@@ -15,6 +17,7 @@ using NewLife.Remoting.Models;
 using NewLife.Security;
 using NewLife.Serialization;
 using NewLife.Threading;
+
 #if !NET40
 using TaskEx = System.Threading.Tasks.Task;
 #endif
@@ -740,6 +743,10 @@ public abstract class ClientBase : DisposeBase, IApiClient, ICommandClient, IEve
             }
 
             Log?.Debug("心跳异常 {0}", ex.GetTrue().Message);
+
+            // 常见网络断开错误不要抛出异常
+            if (ex2 is IOException || ex2 is SocketException sex && sex.SocketErrorCode == SocketError.ConnectionReset)
+                return null;
 
             throw;
         }
