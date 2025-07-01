@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
-
 using NewLife.Caching;
 using NewLife.Data;
 using NewLife.Log;
@@ -17,7 +16,6 @@ using NewLife.Remoting.Models;
 using NewLife.Security;
 using NewLife.Serialization;
 using NewLife.Threading;
-
 #if !NET40
 using TaskEx = System.Threading.Tasks.Task;
 #endif
