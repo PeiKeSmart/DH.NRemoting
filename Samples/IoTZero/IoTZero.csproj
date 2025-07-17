@@ -19,11 +19,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DH.NCube.Core" Version="4.11.2025.630-beta1122" />
-    <PackageReference Include="DH.NIoT" Version="4.13.2025.711-beta0219" />
-    <PackageReference Include="DH.NMQTT" Version="4.13.2025.701-beta1006" />
-    <PackageReference Include="DH.NRedis" Version="4.13.2025.701-beta0850" />
-    <PackageReference Include="DH.NStardust.Extensions" Version="4.13.2025.701-beta0954" />
+    <PackageReference Include="DH.NCube.Core" Version="4.11.2025.711-beta0337" />
+    <PackageReference Include="DH.NIoT" Version="4.13.2025.717-beta0751" />
+    <PackageReference Include="DH.NMQTT" Version="4.13.2025.711-beta0258" />
+    <PackageReference Include="DH.NRedis" Version="4.13.2025.713-beta1514" />
+    <PackageReference Include="DH.NStardust.Extensions" Version="4.13.2025.711-beta0249" />
   </ItemGroup>
 
   <ItemGroup>
