@@ -1,9 +1,7 @@
 ﻿using NewLife.IoT.Models;
 using NewLife.Remoting.Extensions;
-using NewLife.Remoting.Extensions.Models;
-using NewLife.Remoting.Extensions.Services;
 using NewLife.Remoting.Models;
-
+using NewLife.Remoting.Services;
 namespace IoTZero.Services;
 
 /// <summary>IoT扩展</summary>

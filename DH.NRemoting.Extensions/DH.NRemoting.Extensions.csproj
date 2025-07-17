@@ -54,6 +54,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\ITokenSetting.cs" />
+    <Compile Remove="Services\IDeviceService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="..\Doc\DH.png" Link="DH.png" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
