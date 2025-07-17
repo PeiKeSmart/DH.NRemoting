@@ -19,6 +19,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Include="NewLife" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DH.NCube.Core" Version="4.11.2025.711-beta0337" />
     <PackageReference Include="DH.NIoT" Version="4.13.2025.717-beta0751" />
     <PackageReference Include="DH.NMQTT" Version="4.13.2025.711-beta0258" />

@@ -205,10 +205,9 @@ public class MyDeviceService : IDeviceService
 
             // 计算在线时长
             if (olt.CreateTime.Year > 2000)
-            {
                 dv.OnlineTime += (Int32)(DateTime.Now - olt.CreateTime).TotalSeconds;
-                dv.Logout();
-            }
+
+            dv.Logout();
 
             //DeviceOnlineService.CheckOffline(device, "注销");
         }
@@ -418,7 +417,7 @@ public class MyDeviceService : IDeviceService
     /// <param name="deviceCode"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public TokenModel ValidAndIssueToken(String deviceCode, String? token)
+    public TokenModel ValidAndIssueToken(String deviceCode, String token)
     {
         if (token.IsNullOrEmpty()) return null;
 
