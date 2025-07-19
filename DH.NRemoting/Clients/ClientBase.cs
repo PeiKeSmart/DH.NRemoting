@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
+
 using NewLife.Caching;
 using NewLife.Data;
 using NewLife.Log;
@@ -16,6 +17,7 @@ using NewLife.Remoting.Models;
 using NewLife.Security;
 using NewLife.Serialization;
 using NewLife.Threading;
+
 #if !NET40
 using TaskEx = System.Threading.Tasks.Task;
 #endif
@@ -811,12 +813,12 @@ public abstract class ClientBase : DisposeBase, IApiClient, ICommandClient, IEve
             req.IP = ip;
 
             req.Delay = Delay;
-            req.Uptime = Environment.TickCount / 1000;
+            req.Uptime = (Int32)(Runtime.TickCount64 / 1000);
 
-            // 开始时间 Environment.TickCount 很容易溢出，导致开机24天后变成负数。
-            // 后来在 netcore3.0 增加了Environment.TickCount64
-            // 现在借助 Stopwatch 来解决
-            if (Stopwatch.IsHighResolution) req.Uptime = (Int32)(Stopwatch.GetTimestamp() / Stopwatch.Frequency);
+            //// 开始时间 Environment.TickCount 很容易溢出，导致开机24天后变成负数。
+            //// 后来在 netcore3.0 增加了Environment.TickCount64
+            //// 现在借助 Stopwatch 来解决
+            //if (Stopwatch.IsHighResolution) req.Uptime = (Int32)(Stopwatch.GetTimestamp() / Stopwatch.Frequency);
 
             if (mi is IExtend ext)
             {
