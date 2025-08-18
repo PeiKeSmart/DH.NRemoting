@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
-
 using NewLife.Caching;
 using NewLife.Data;
 using NewLife.Log;
@@ -17,7 +16,6 @@ using NewLife.Remoting.Models;
 using NewLife.Security;
 using NewLife.Serialization;
 using NewLife.Threading;
-
 #if !NET40
 using TaskEx = System.Threading.Tasks.Task;
 #endif
@@ -157,6 +155,12 @@ public abstract class ClientBase : DisposeBase, IApiClient, ICommandClient, IEve
 
         _timerLogin.TryDispose();
         _timerLogin = null;
+
+        if (_client is ApiClient client)
+            client.Received -= OnRpcReceive;
+
+        _client.TryDispose();
+        _client = null;
     }
     #endregion
 
@@ -265,19 +269,22 @@ public abstract class ClientBase : DisposeBase, IApiClient, ICommandClient, IEve
             Timeout = Timeout,
             Log = Log
         };
-        client.Received += (s, e) =>
-        {
-            var msg = e.Message;
-            var api = e.ApiMessage;
-            if (msg != null && !msg.Reply && api != null && api.Action == "Notify")
-            {
-                var cmd = api.Data?.ToStr().ToJsonEntity<CommandModel>();
-                if (cmd != null)
-                    _ = ReceiveCommand(cmd, client.Local?.Type + "");
-            }
-        };
+        client.Received += OnRpcReceive;
 
         return client;
+    }
+
+    private void OnRpcReceive(Object? sender, ApiReceivedEventArgs e)
+    {
+        var client = (sender as ApiClient)!;
+        var msg = e.Message;
+        var api = e.ApiMessage;
+        if (msg != null && !msg.Reply && api != null && api.Action == "Notify")
+        {
+            var cmd = api.Data?.ToStr().ToJsonEntity<CommandModel>();
+            if (cmd != null)
+                _ = ReceiveCommand(cmd, client.Local?.Type + "");
+        }
     }
 
     class MyApiClient : ApiClient
