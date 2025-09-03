@@ -1,9 +1,12 @@
 ﻿using IoTZero;
 using IoTZero.Services;
 using NewLife.Cube;
+using NewLife.IoT.Models;
 using NewLife.Log;
 using NewLife.Reflection;
 using NewLife.Remoting.Extensions;
+using NewLife.Remoting.Models;
+using Stardust.Models;
 using XCode;
 
 // 日志输出到控制台，并拦截全局异常
@@ -29,6 +32,7 @@ services.AddSingleton(set);
 //services.AddSingleton<ICacheProvider, RedisCacheProvider>();
 
 // 注册Remoting所必须的服务
+services.AddSingleton<IPingResponse, MyPingResponse>();
 services.AddIoT(set);
 //services.AddRemoting(set);
 
