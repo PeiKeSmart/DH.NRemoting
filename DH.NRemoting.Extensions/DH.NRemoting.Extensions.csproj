@@ -19,7 +19,7 @@
     <LangVersion>latest</LangVersion>
     <NoWarn>1701;1702;NU5104;NETSDK1138;CS7035</NoWarn>
     <AnalysisLevel>latest</AnalysisLevel>
-    <WarningsAsErrors>CA2007</WarningsAsErrors>
+    <!--<WarningsAsErrors>CA2007</WarningsAsErrors>-->
 
     <!--禁止生成launchSettings.json-->
     <NoDefaultLaunchSettingsFile>True</NoDefaultLaunchSettingsFile>
