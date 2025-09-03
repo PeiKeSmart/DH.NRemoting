@@ -29,7 +29,7 @@
     <RepositoryUrl>https://github.com/PeiKeSmart/DH.NRemoting</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>湖北登灏科技有限公司;DH组件;DH;$(AssemblyName)</PackageTags>
-    <PackageReleaseNotes>第三代协议通信库，增强RPC，引入主流Http/WebSockt/WebApi应用级封装</PackageReleaseNotes>
+    <PackageReleaseNotes>IDeviceService引入DeviceContext实现横切</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
