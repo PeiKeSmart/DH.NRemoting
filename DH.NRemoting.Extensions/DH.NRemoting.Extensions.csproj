@@ -68,7 +68,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DH.NCode" Version="4.14.2025.1002-beta0252" />
+    <PackageReference Include="DH.NCode" Version="4.14.2025.1106-beta0329" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DH.NRemoting\DH.NRemoting.csproj" />
