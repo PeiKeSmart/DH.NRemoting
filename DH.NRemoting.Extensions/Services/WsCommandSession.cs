@@ -5,6 +5,7 @@ using NewLife.Remoting.Models;
 using NewLife.Remoting.Services;
 using NewLife.Security;
 using NewLife.Serialization;
+using Host = NewLife.Model.Host;
 
 namespace NewLife.Remoting.Extensions.Services;
 
