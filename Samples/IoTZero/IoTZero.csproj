@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <AssemblyTitle>物联网服务平台</AssemblyTitle>
     <Description>IoT服务平台</Description>
     <Company>湖北登灏科技有限公司</Company>
