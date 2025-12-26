@@ -5,12 +5,12 @@
         border-color: rgb(211, 202, 221);
     }
 
-    table thead,
-    table tr {
-        border-top-width: 1px;
-        border-top-style: solid;
-        border-top-color: rgb(211, 202, 221);
-    }
+        table thead,
+        table tr {
+            border-top-width: 1px;
+            border-top-style: solid;
+            border-top-color: rgb(211, 202, 221);
+        }
 
     table {
         border-bottom-width: 1px;
@@ -18,21 +18,21 @@
         border-bottom-color: rgb(211, 202, 221);
     }
 
-    table td,
-    table th {
-        padding: 5px 10px;
-        font-size: 14px;
-        font-family: Verdana;
-        color: rgb(95, 74, 121);
-    }
+        table td,
+        table th {
+            padding: 5px 10px;
+            font-size: 14px;
+            font-family: Verdana;
+            color: rgb(95, 74, 121);
+        }
 
-    table tr:nth-child(even) {
-        background: rgb(223, 216, 232)
-    }
+        table tr:nth-child(even) {
+            background: rgb(223, 216, 232)
+        }
 
-    table tr:nth-child(odd) {
-        background: #FFF
-    }
+        table tr:nth-child(odd) {
+            background: #FFF
+        }
 </style>
 <h3>节点（Node）</h3>
 <table>
@@ -914,6 +914,17 @@
         </tr>
 
         <tr>
+            <td>FreeMemory</td>
+            <td>空闲内存</td>
+            <td>Int32</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>N</td>
+            <td>在Linux上空闲不一定可用，部分作为缓存，单位M</td>
+        </tr>
+
+        <tr>
             <td>MemoryUsed</td>
             <td>已用内存</td>
             <td>Int32</td>
@@ -921,7 +932,7 @@
             <td></td>
             <td></td>
             <td>N</td>
-            <td>单位M</td>
+            <td>总内存减去空闲内存，单位M</td>
         </tr>
 
         <tr>
