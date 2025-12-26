@@ -8,6 +8,7 @@ using NewLife.Remoting.Extensions.Services;
 using NewLife.Remoting.Models;
 using NewLife.Remoting.Services;
 using NewLife.Security;
+using NewLife.Serialization;
 
 namespace NewLife.Remoting.Extensions;
 
@@ -19,6 +20,7 @@ public static class RemotingExtensions
     /// 注册登录心跳等模型类，可再次扩展模型类，传输更多内容；
     /// 注册TokenService令牌服务，提供令牌颁发与验证服务；
     /// 注册密码提供者，用于通信过程中保护密钥，避免明文传输；
+    /// 注册缓存提供者的默认实现；
     /// 注册授权策略 DeviceRequired（RequireClaim("code")），便于使用 [Authorize(Policy = "DeviceRequired")]保护接口；
     /// </remarks>
     /// <param name="services"></param>
@@ -36,6 +38,7 @@ public static class RemotingExtensions
         services.TryAddTransient<IPingResponse, PingResponse>();
 
         services.TryAddSingleton<ISessionManager, SessionManager>();
+        services.TryAddSingleton(JsonHelper.Default);
 
         // 注册Remoting所必须的服务
         if (setting != null)
