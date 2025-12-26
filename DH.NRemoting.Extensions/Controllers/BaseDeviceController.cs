@@ -5,6 +5,7 @@ using NewLife.Remoting.Extensions.Services;
 using NewLife.Remoting.Models;
 using NewLife.Remoting.Services;
 using NewLife.Security;
+
 using WebSocket = System.Net.WebSockets.WebSocket;
 
 namespace NewLife.Remoting.Extensions;
@@ -221,11 +222,12 @@ public abstract class BaseDeviceController : BaseController
         var sessionManager = _sessionManager ?? throw new InvalidOperationException("未找到SessionManager服务");
 
         using var span = _tracer?.NewSpan("cmd:Ws:Create", device.Code);
-        using var session = new WsCommandSession(socket, _serviceProvider)
+        using var session = new WsCommandSession(socket)
         {
             Code = device.Code,
             Log = this,
             SetOnline = online => _deviceService.SetOnline(Context, online),
+            ServiceProvider = _serviceProvider,
             Tracer = _tracer,
         };
 
