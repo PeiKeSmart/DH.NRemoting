@@ -6,8 +6,8 @@
     <AssemblyTitle>客户端桌面应用</AssemblyTitle>
     <Description>CS架构的客户端桌面应用，给用户提供便捷操作，可对接硬件</Description>
     <Company>湖北登灏科技有限公司</Company>
-    <Copyright>©2020-2025 湖北登灏科技有限公司</Copyright>
-    <VersionPrefix>1.0</VersionPrefix>
+    <Copyright>©2020-2026 湖北登灏科技有限公司</Copyright>
+    <VersionPrefix>4.17</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
     <FileVersion>$(Version)</FileVersion>
@@ -26,7 +26,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DH.NStardust" Version="4.16.2025.1229-beta1000" />
+    <PackageReference Include="DH.NStardust" Version="4.17.2026.106-beta1019" />
     <PackageReference Include="System.Speech" Version="10.0.1" />
   </ItemGroup>
 

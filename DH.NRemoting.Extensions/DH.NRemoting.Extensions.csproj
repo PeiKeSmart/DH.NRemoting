@@ -6,8 +6,8 @@
     <AssemblyTitle>协议通信扩展库</AssemblyTitle>
     <Description>提供WebApi应用级服务端</Description>
     <Company>湖北登灏科技有限公司</Company>
-    <Copyright>©2020-2025 湖北登灏科技有限公司</Copyright>
-    <VersionPrefix>4.16</VersionPrefix>
+    <Copyright>©2020-2026 湖北登灏科技有限公司</Copyright>
+    <VersionPrefix>4.17</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
     <FileVersion>$(Version)</FileVersion>
@@ -68,7 +68,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DH.NCode" Version="4.16.2025.1230-beta0156" />
+    <PackageReference Include="DH.NCode" Version="4.17.2026.106-beta0911" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DH.NRemoting\DH.NRemoting.csproj" />
