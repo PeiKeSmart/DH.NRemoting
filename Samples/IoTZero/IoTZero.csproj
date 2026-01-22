@@ -25,7 +25,7 @@
   <ItemGroup>
     <PackageReference Include="DH.NCube.Core" Version="4.11.2025.826-beta0719" />
     <PackageReference Include="DH.NIoT" Version="4.17.2026.114-beta0402" />
-    <PackageReference Include="DH.NMQTT" Version="4.17.2026.121-beta1254" />
+    <PackageReference Include="DH.NMQTT" Version="4.17.2026.121-beta1132" />
     <PackageReference Include="DH.NRedis" Version="4.17.2026.115-beta0813" />
     <PackageReference Include="DH.NStardust.Extensions" Version="4.17.2026.116-beta0319" />
   </ItemGroup>
