@@ -99,6 +99,11 @@ public class JsonEncoder : EncoderBase, IEncoder
         rs.Payload = payload;
         if (code is not ApiCode.Ok and not 200) rs.Error = true;
 
+        // 调试日志：检查响应消息的Reply标志
+        if (NewLife.Net.SocketSetting.Current.Debug)
+            NewLife.Log.XTrace.WriteLine("[JsonEncoder.CreateResponse] 创建响应 | action={0} | msg.Reply={1} | rs.Reply={2} | rs.Seq={3}",
+                action, msg.Reply, rs.Reply, rs is DefaultMessage dm2 ? dm2.Sequence : -1);
+
         return rs;
     }
 
