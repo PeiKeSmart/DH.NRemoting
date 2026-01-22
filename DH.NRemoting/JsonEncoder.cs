@@ -75,7 +75,12 @@ public class JsonEncoder : EncoderBase, IEncoder
 
         var payload = Encode(action, null, pk);
 
-        return new DefaultMessage { Payload = payload, };
+        var msg = new DefaultMessage { Payload = payload, };
+        
+        // 调试日志：输出消息序列号便于追踪
+        WriteLog("[CreateRequest] action={0} | Seq={1:X2} | PayloadLen={2}", action, msg.Sequence, payload?.Total);
+
+        return msg;
     }
 
     /// <summary>创建响应</summary>
@@ -89,8 +94,9 @@ public class JsonEncoder : EncoderBase, IEncoder
         // 编码响应数据包，二进制优先
         var pk = EncodeValue(value, out var str);
 
+        var reqSeq = msg is DefaultMessage dm ? dm.Sequence : 0;
         if (Log != null && str.IsNullOrEmpty() && pk != null) str = $"[{pk?.Total}]";
-        WriteLog("{0}[{2:X2}]=>{1}", action, str, msg is DefaultMessage dm ? dm.Sequence : 0);
+        WriteLog("{0}[{2:X2}]=>{1}", action, str, reqSeq);
 
         var payload = Encode(action, code, pk);
 
@@ -99,10 +105,10 @@ public class JsonEncoder : EncoderBase, IEncoder
         rs.Payload = payload;
         if (code is not ApiCode.Ok and not 200) rs.Error = true;
 
-        // 调试日志：检查响应消息的Reply标志
-        if (NewLife.Net.SocketSetting.Current.Debug)
-            NewLife.Log.XTrace.WriteLine("[JsonEncoder.CreateResponse] 创建响应 | action={0} | msg.Reply={1} | rs.Reply={2} | rs.Seq={3}",
-                action, msg.Reply, rs.Reply, rs is DefaultMessage dm2 ? dm2.Sequence : -1);
+        // 调试日志：输出响应消息序列号
+        var rsSeq = rs is DefaultMessage dm2 ? dm2.Sequence : 0;
+        WriteLog("[CreateResponse] action={0} | ReqSeq={1:X2} | RspSeq={2:X2} | Reply={3} | PayloadLen={4}", 
+            action, reqSeq, rsSeq, rs.Reply, payload?.Total);
 
         return rs;
     }
