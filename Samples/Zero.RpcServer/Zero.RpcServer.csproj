@@ -7,7 +7,7 @@
     <Description>高性能，长连接，数据接口</Description>
     <Company>湖北登灏科技有限公司</Company>
     <Copyright>©2020-2026 湖北登灏科技有限公司</Copyright>
-    <VersionPrefix>4.17</VersionPrefix>
+    <VersionPrefix>4.18</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
     <FileVersion>$(Version)</FileVersion>
@@ -20,9 +20,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DH.NCode" Version="4.17.2026.129-beta1327" />
-    <PackageReference Include="DH.NRedis" Version="4.17.2026.115-beta0813" />
-    <PackageReference Include="DH.NStardust" Version="4.17.2026.130-beta0212" />
+    <PackageReference Include="DH.NCode" Version="4.18.2026.210" />
+    <PackageReference Include="DH.NRedis" Version="4.17.2026.130-beta1020" />
+    <PackageReference Include="DH.NStardust" Version="4.18.2026.210" />
   </ItemGroup>
 
   <ItemGroup>

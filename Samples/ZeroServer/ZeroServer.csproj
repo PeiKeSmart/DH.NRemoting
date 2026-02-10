@@ -6,7 +6,7 @@
     <Description>CS架构服务端平台</Description>
     <Company>湖北登灏科技有限公司</Company>
     <Copyright>©2020-2026 湖北登灏科技有限公司</Copyright>
-    <VersionPrefix>4.17</VersionPrefix>
+    <VersionPrefix>4.18</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
     <FileVersion>$(Version)</FileVersion>
@@ -20,8 +20,8 @@
 
   <ItemGroup>
     <PackageReference Include="DH.NCube.Core" Version="4.11.2025.826-beta0719" />
-    <PackageReference Include="DH.NRedis" Version="4.17.2026.115-beta0813" />
-    <PackageReference Include="DH.NStardust.Extensions" Version="4.17.2026.130-beta0212" />
+    <PackageReference Include="DH.NRedis" Version="4.17.2026.130-beta1020" />
+    <PackageReference Include="DH.NStardust.Extensions" Version="4.18.2026.210" />
   </ItemGroup>
 
   <ItemGroup>

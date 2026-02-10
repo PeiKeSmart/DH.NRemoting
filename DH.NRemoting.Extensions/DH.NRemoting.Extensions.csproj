@@ -7,7 +7,7 @@
     <Description>提供WebApi应用级服务端</Description>
     <Company>湖北登灏科技有限公司</Company>
     <Copyright>©2020-2026 湖北登灏科技有限公司</Copyright>
-    <VersionPrefix>4.17</VersionPrefix>
+    <VersionPrefix>4.18</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
     <FileVersion>$(Version)</FileVersion>
@@ -35,7 +35,7 @@
     <RepositoryUrl>https://github.com/PeiKeSmart/DH.NRemoting</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>湖北登灏科技有限公司;DH组件;DH;$(AssemblyName)</PackageTags>
-    <PackageReleaseNotes>ApiServer支持异步方法；ClientBase客户端支持事件总线；支持EventHub分发WebSocket事件；增加阿里云OpenAPI客户端</PackageReleaseNotes>
+    <PackageReleaseNotes>ApiServer支持动态端口分配；修正证书密钥赋值错误；优化OAuth异常处理；增强HttpMessage解析兼容性；提升单元测试稳定性</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -68,7 +68,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DH.NCode" Version="4.17.2026.129-beta1327" />
+    <PackageReference Include="DH.NCode" Version="4.18.2026.210" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DH.NRemoting\DH.NRemoting.csproj" />
