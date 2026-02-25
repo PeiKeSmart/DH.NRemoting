@@ -26,8 +26,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DH.NStardust" Version="4.18.2026.210" />
-    <PackageReference Include="System.Speech" Version="10.0.2" />
+    <PackageReference Include="DH.NStardust" Version="4.18.2026.225-beta1147" />
+    <PackageReference Include="System.Speech" Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup>
