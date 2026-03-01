@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Benchmark/">
+    <Project Path="Benchmark/DH.NRemoting.Benchmarks.csproj" />
+  </Folder>
   <Folder Name="/Samples/">
     <Project Path="Samples/Demo/Demo.csproj" />
     <Project Path="Samples/IoTZero/IoTZero.csproj" />
