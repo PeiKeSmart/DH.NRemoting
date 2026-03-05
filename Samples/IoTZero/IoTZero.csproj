@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <AssemblyTitle>物联网服务平台</AssemblyTitle>
-    <Description>IoT服务平台</Description>
+    <AssemblyTitle>物联网接入平台</AssemblyTitle>
+    <Description>基于Remoting与Cube构建设备接入与管理平台</Description>
     <Company>湖北登灏科技有限公司</Company>
     <Copyright>©2020-2026 湖北登灏科技有限公司</Copyright>
     <VersionPrefix>4.21</VersionPrefix>
