@@ -108,7 +108,7 @@ public class HttpMessageTests
         Assert.True(msg.Read(pk));
 
         Assert.True(msg.ParseHeaders());
-        Assert.True(msg.Headers.ContainsKey(""));
+        Assert.True(msg.Headers.ContainsKey("") );
         Assert.Equal("example", msg.Headers["Host"]);
     }
 }
