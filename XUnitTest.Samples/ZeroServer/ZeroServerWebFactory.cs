@@ -1,11 +1,11 @@
-extern alias ZeroServer;
-
+﻿extern alias ZeroServer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using NewLife;
 using NewLife.Log;
 using Xunit;
+using ZeroServer::ZeroClient;
 
 namespace XUnitTest.Samples.ZeroServer;
 
@@ -21,6 +21,18 @@ public sealed class ZeroServerWebFactory : WebApplicationFactory<ZeroServer::Pro
 
     /// <summary>原始工作目录（析构时恢复）</summary>
     private String _origCurrentDir = null!;
+
+    /// <summary>共享测试状态：已登录的客户端（贯穿全部 9 个测试步骤）</summary>
+    public NodeClient TestClient { get; private set; } = null!;
+
+    /// <summary>共享测试状态：客户端设置（Code/Secret 在 Step1 登录后回填）</summary>
+    public ClientSetting TestSetting { get; private set; } = null!;
+
+    /// <summary>共享测试状态：设备编码（Step1 登录后填充，后续步骤使用）</summary>
+    public String TestCode { get; set; } = null!;
+
+    /// <summary>共享测试状态：节点 ID（Step2 验证实体后填充，后续步骤使用）</summary>
+    public Int32 TestNodeId { get; set; }
     #endregion
 
     #region WebApplicationFactory 重写
@@ -44,21 +56,21 @@ public sealed class ZeroServerWebFactory : WebApplicationFactory<ZeroServer::Pro
         // 覆盖连接串为临时 SQLite 文件，每次测试数据完全隔离
         // ZeroServer 实体 ConnName 映射：Node→"Zero"，NodeOnline/NodeHistory→"StardustData"，Area→"Membership"
         // 同时覆盖 "IoT"，防止 EntityFactory.InitAll() 用 appsettings.json 的相对路径初始化 IoTZero 的实体连接
-        var dataDir      = Path.Combine(TempDir, "Data");
-        var dbZero       = $"Data Source={Path.Combine(dataDir, "Zero.db")};Provider=Sqlite";
-        var dbStardust   = $"Data Source={Path.Combine(dataDir, "StardustData.db")};Provider=Sqlite";
+        var dataDir = Path.Combine(TempDir, "Data");
+        var dbZero = $"Data Source={Path.Combine(dataDir, "Zero.db")};Provider=Sqlite";
+        var dbStardust = $"Data Source={Path.Combine(dataDir, "StardustData.db")};Provider=Sqlite";
         var dbMembership = $"Data Source={Path.Combine(dataDir, "Membership.db")};Provider=Sqlite";
-        var dbIoT        = $"Data Source={Path.Combine(dataDir, "IoT.db")};Provider=Sqlite";
+        var dbIoT = $"Data Source={Path.Combine(dataDir, "IoT.db")};Provider=Sqlite";
 
         builder.ConfigureAppConfiguration((_, cfg) =>
         {
             cfg.AddInMemoryCollection(new Dictionary<String, String?>
             {
-                ["ConnectionStrings:Zero"]        = dbZero,
+                ["ConnectionStrings:Zero"] = dbZero,
                 ["ConnectionStrings:StardustData"] = dbStardust,
-                ["ConnectionStrings:Membership"]  = dbMembership,
-                ["ConnectionStrings:IoT"]         = dbIoT,
-                ["XCodeSetting:ShowSQL"]          = "false",
+                ["ConnectionStrings:Membership"] = dbMembership,
+                ["ConnectionStrings:IoT"] = dbIoT,
+                ["XCodeSetting:ShowSQL"] = "false",
             });
         });
     }
@@ -75,11 +87,17 @@ public sealed class ZeroServerWebFactory : WebApplicationFactory<ZeroServer::Pro
         // WAF 在 CreateHost 后调用 TryExtractHostAddress，自动将实际端口写入 ClientOptions.BaseAddress
         BaseUrl = ClientOptions.BaseAddress?.ToString()?.TrimEnd('/') ?? "";
         XTrace.WriteLine("ZeroServerWebFactory 启动，地址：{0}", BaseUrl);
+
+        // 初始化共享测试状态：创建客户端（Step1 时以空 Code/Secret 触发自动注册）
+        TestSetting = new ClientSetting { Server = BaseUrl };
+        TestClient = new NodeClient(TestSetting) { Log = XTrace.Log };
+
         await Task.CompletedTask;
     }
 
     async Task IAsyncLifetime.DisposeAsync()
     {
+        (TestClient as IDisposable)?.Dispose();
         Dispose();
         await Task.CompletedTask;
     }
