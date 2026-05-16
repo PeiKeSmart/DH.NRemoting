@@ -22,5 +22,6 @@
   <Project Path="DH.NRemoting.Extensions/DH.NRemoting.Extensions.csproj" />
   <Project Path="DH.NRemoting/DH.NRemoting.csproj" />
   <Project Path="Test/Test.csproj" />
+  <Project Path="XUnitTest.Samples/XUnitTest.Samples.csproj" />
   <Project Path="XUnitTest/XUnitTest.csproj" />
 </Solution>
