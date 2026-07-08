@@ -8,7 +8,6 @@ using NewLife.Messaging;
 using NewLife.Remoting;
 using NewLife.Security;
 using NewLife.Serialization;
-
 using Xunit;
 
 #pragma warning disable CS0618 // 测试中用到的 Packet 类型虽已过时但仍支持
