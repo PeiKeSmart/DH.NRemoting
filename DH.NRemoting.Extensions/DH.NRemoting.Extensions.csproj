@@ -7,7 +7,7 @@
     <Description>提供设备接入控制器、令牌服务与会话管理扩展</Description>
     <Company>湖北登灏科技有限公司</Company>
     <Copyright>©2020-2026 湖北登灏科技有限公司</Copyright>
-    <VersionPrefix>4.21</VersionPrefix>
+    <VersionPrefix>4.24</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
     <FileVersion>$(Version)</FileVersion>
@@ -35,7 +35,7 @@
     <RepositoryUrl>https://github.com/PeiKeSmart/DH.NRemoting</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>湖北登灏科技有限公司;DH组件;DH;$(AssemblyName)</PackageTags>
-    <PackageReleaseNotes>新增RemotingServiceResolver多协议服务解析器；优化WebSocket消息收发内存管理与异常处理；集成测试重构为有序独立步骤方法；扩展测试覆盖至409项；升级依赖组件</PackageReleaseNotes>
+    <PackageReleaseNotes>修复响应消息重复解码导致的处理异常；修复缓冲区脏读问题并提升并发稳定性；优化ApiHandler参数默认值处理逻辑；优化字符串处理并升级依赖组件</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
