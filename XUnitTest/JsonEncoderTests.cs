@@ -8,7 +8,10 @@ using NewLife.Messaging;
 using NewLife.Remoting;
 using NewLife.Security;
 using NewLife.Serialization;
+
 using Xunit;
+
+#pragma warning disable CS0618 // 测试中用到的 Packet 类型虽已过时但仍支持
 
 namespace XUnitTest;
 
@@ -33,7 +36,7 @@ public class JsonEncoderTests
             var reader = new SpanReader(pk.GetSpan());
 
             Assert.Equal(name, reader.ReadString());
-            if (reader.FreeCapacity > 0) Assert.Equal(0u, reader.ReadUInt32());
+            if (reader.Available > 0) Assert.Equal(0u, reader.ReadUInt32());
         }
         // 简洁请求，带空数据
         {
@@ -47,7 +50,7 @@ public class JsonEncoderTests
             var reader = new SpanReader(pk.GetSpan());
 
             Assert.Equal(name, reader.ReadString());
-            if (reader.FreeCapacity > 0) Assert.Equal(0u, reader.ReadUInt32());
+            if (reader.Available > 0) Assert.Equal(0u, reader.ReadUInt32());
         }
         // 标准请求，带数据体
         {
@@ -266,7 +269,7 @@ public class JsonEncoderTests
             var reader = new SpanReader(pk.GetSpan());
 
             Assert.Equal(name, reader.ReadString());
-            if (reader.FreeCapacity > 0) Assert.Equal(0, reader.ReadInt32());
+            if (reader.Available > 0) Assert.Equal(0, reader.ReadInt32());
 
             var dm = res as DefaultMessage;
             Assert.True(dm.Reply);
@@ -407,7 +410,7 @@ public class JsonEncoderTests
         var encoder = new JsonEncoder();
 
         {
-            var value = new Packet(Rand.NextBytes(64));
+            var value = new ArrayPacket(Rand.NextBytes(64));
             var pk = encoder.EncodeValue(value, out var str);
             Assert.Equal(value, pk);
             Assert.Empty(str);

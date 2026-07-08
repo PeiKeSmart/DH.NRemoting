@@ -6,6 +6,8 @@
     <Description>覆盖Remoting核心组件行为与兼容性回归验证</Description>
     <OutputPath>..\Bin\UnitTest</OutputPath>
     <IsPackable>false</IsPackable>
+    <!-- 测试代码中大量使用 ? 注解但无可空上下文，统一抑制 CS8632 -->
+    <NoWarn>$(NoWarn);CS8632</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
