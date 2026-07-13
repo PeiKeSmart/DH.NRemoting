@@ -272,6 +272,19 @@ public class ApiHandler : IApiHandler
             raw = enc.DecodeParameters(action, pk, msg);
             if (raw is IDictionary<String, Object?> dic2)
                 dic = dic2;
+
+            // 诊断日志：查看解码结果
+            if (raw == null)
+                XTrace.WriteLine("ApiHandler.Prepare: DecodeParameters 返回 null！action={0}, dataSize={1}, json=[{2}]",
+                    action, pk.Total, pk.ToStr(0, 500));
+            else
+                XTrace.WriteLine("ApiHandler.Prepare: rawType={0}, dicCount={1}, action={2}",
+                    raw.GetType().FullName, dic?.Count ?? -1, action);
+        }
+        else
+        {
+            XTrace.WriteLine("ApiHandler.Prepare: args不是IPacket或为空！action={0}, argsType={1}",
+                action, args?.GetType().FullName ?? "null");
         }
 
         dic ??= new NullableDictionary<String, Object?>(StringComparer.OrdinalIgnoreCase);
