@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Reflection;
-using NewLife;
 using NewLife.Collections;
 using NewLife.Data;
 using NewLife.Log;
@@ -272,23 +271,6 @@ public class ApiHandler : IApiHandler
             raw = enc.DecodeParameters(action, pk, msg);
             if (raw is IDictionary<String, Object?> dic2)
                 dic = dic2;
-
-            // 诊断日志：查看解码结果
-            if (raw == null)
-            {
-                var json = pk.ToStr();
-                if (json.Length > 500) json = json[..500];
-                XTrace.WriteLine("ApiHandler.Prepare: DecodeParameters 返回 null！action={0}, dataSize={1}, json=[{2}]",
-                    action, pk.Total, json);
-            }
-            else
-                XTrace.WriteLine("ApiHandler.Prepare: rawType={0}, dicCount={1}, action={2}",
-                    raw.GetType().FullName, dic?.Count ?? -1, action);
-        }
-        else
-        {
-            XTrace.WriteLine("ApiHandler.Prepare: args不是IPacket或为空！action={0}, argsType={1}",
-                action, args?.GetType().FullName ?? "null");
         }
 
         dic ??= new NullableDictionary<String, Object?>(StringComparer.OrdinalIgnoreCase);
@@ -344,25 +326,7 @@ public class ApiHandler : IApiHandler
                     if (raw == null)
                         ps[pi.Name] = pi.HasDefaultValue ? pi.DefaultValue : null;
                     else
-                    {
-                        // 诊断日志：记录 Convert 前后的数据
-                        var rawType = raw.GetType().FullName;
-                        var rawJson = raw is String ? raw + "" : "";
-                        // 尝试获取 raw 的 JSON 表示
-                        try { rawJson = raw.ToJson(false, false, false); } catch { }
-                        XTrace.WriteLine("ApiHandler.Convert: rawType={0}, targetType={1}, rawJson={2}",
-                            rawType, pi.ParameterType.FullName, rawJson[..Math.Min(rawJson.Length, 500)]);
-
                         ps[pi.Name] = encoder.Convert(raw, pi.ParameterType);
-
-                        // 检查转换结果
-                        if (ps[pi.Name] is Array arr)
-                            XTrace.WriteLine("ApiHandler.Convert 结果: {0}, Length={1}", arr.GetType().FullName, arr.Length);
-                        else if (ps[pi.Name] == null)
-                            XTrace.WriteLine("ApiHandler.Convert 结果: NULL！");
-                        else
-                            XTrace.WriteLine("ApiHandler.Convert 结果: {0}", ps[pi.Name]?.GetType().FullName);
-                    }
 
                     return ps;
                 }

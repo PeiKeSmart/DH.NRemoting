@@ -274,16 +274,6 @@ public class ApiServer : ApiHost, IServer, IServiceProvider
         // 动作名必须是 ASCII，跳过乱码
         if (!IsAscii(request.Action)) return null;
 
-        // 诊断日志：Cluster/Subscribe 等关键接口打印入参大小
-        if (request.Action.EndsWith("Subscribe") || request.Action.EndsWith("Publish"))
-        {
-            var dataSize = request.Data?.Total ?? 0;
-            var json = dataSize > 0 ? request.Data.ToStr() : "";
-            if (json.Length > 1024) json = json[..1024];
-            XTrace.WriteLine("ApiServer.Process: action={0}, dataSize={1}, data=[{2}]",
-                request.Action, dataSize, json);
-        }
-
         using var span = Tracer?.NewSpan("rps:" + request.Action, request.Data);
 
         var code = 0;
