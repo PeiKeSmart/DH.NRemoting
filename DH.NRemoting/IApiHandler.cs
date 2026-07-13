@@ -275,8 +275,12 @@ public class ApiHandler : IApiHandler
 
             // 诊断日志：查看解码结果
             if (raw == null)
+            {
+                var json = pk.ToStr();
+                if (json.Length > 500) json = json[..500];
                 XTrace.WriteLine("ApiHandler.Prepare: DecodeParameters 返回 null！action={0}, dataSize={1}, json=[{2}]",
-                    action, pk.Total, pk.ToStr(0, 500));
+                    action, pk.Total, json);
+            }
             else
                 XTrace.WriteLine("ApiHandler.Prepare: rawType={0}, dicCount={1}, action={2}",
                     raw.GetType().FullName, dic?.Count ?? -1, action);
