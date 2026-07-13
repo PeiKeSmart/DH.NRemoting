@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Reflection;
+using NewLife;
 using NewLife.Collections;
 using NewLife.Data;
 using NewLife.Log;
@@ -326,7 +327,25 @@ public class ApiHandler : IApiHandler
                     if (raw == null)
                         ps[pi.Name] = pi.HasDefaultValue ? pi.DefaultValue : null;
                     else
+                    {
+                        // 诊断日志：记录 Convert 前后的数据
+                        var rawType = raw.GetType().FullName;
+                        var rawJson = raw is String ? raw + "" : "";
+                        // 尝试获取 raw 的 JSON 表示
+                        try { rawJson = raw.ToJson(false, false, false); } catch { }
+                        XTrace.WriteLine("ApiHandler.Convert: rawType={0}, targetType={1}, rawJson={2}",
+                            rawType, pi.ParameterType.FullName, rawJson[..Math.Min(rawJson.Length, 500)]);
+
                         ps[pi.Name] = encoder.Convert(raw, pi.ParameterType);
+
+                        // 检查转换结果
+                        if (ps[pi.Name] is Array arr)
+                            XTrace.WriteLine("ApiHandler.Convert 结果: {0}, Length={1}", arr.GetType().FullName, arr.Length);
+                        else if (ps[pi.Name] == null)
+                            XTrace.WriteLine("ApiHandler.Convert 结果: NULL！");
+                        else
+                            XTrace.WriteLine("ApiHandler.Convert 结果: {0}", ps[pi.Name]?.GetType().FullName);
+                    }
 
                     return ps;
                 }
