@@ -1,6 +1,8 @@
-﻿using System.Net.Http;
+﻿using System.Collections;
+using System.Net.Http;
 using System.Web;
 using NewLife.Collections;
+using NewLife.Reflection;
 
 namespace NewLife.Remoting.CloudProviders;
 
@@ -67,7 +69,16 @@ public class AliyunClient : ApiHttpClient
     /// <returns></returns>
     protected override HttpRequestMessage BuildRequest(HttpMethod method, String action, Object? args, Type? returnType)
     {
-        var parameters = args?.ToDictionary();
+        Object? parameters = null;
+        if (args != null)
+        {
+            var type = args.GetType();
+            // 基础类型/数组/列表不能转为字典，直接传原始参数对象
+            if (type.IsBaseType() || type.IsArray || typeof(IList).IsAssignableFrom(type))
+                parameters = args;
+            else
+                parameters = args.ToDictionary();
+        }
         var request = base.BuildRequest(method, action, parameters, returnType);
         if (request.Headers.Host.IsNullOrEmpty())
             request.Headers.Host = Endpoint;
@@ -95,7 +106,7 @@ public class AliyunClient : ApiHttpClient
 
         // 2. 计算签名
         var signedHeaders = new List<String>();
-        var canonicalRequest = AliyunClient.CreateCanonicalRequest(request, parameters, signedHeaders);
+        var canonicalRequest = AliyunClient.CreateCanonicalRequest(request, parameters as IDictionary<String, Object?>, signedHeaders);
         var hashedRequest = canonicalRequest.GetBytes().SHA256().ToHex("").ToLowerInvariant();
         var stringToSign = $"{SignatureAlgorithm}\n{hashedRequest}";
         var signature = stringToSign.GetBytes().SHA256(AccessKeySecret.GetBytes()).ToHex("").ToLowerInvariant();
@@ -126,7 +137,8 @@ public class AliyunClient : ApiHttpClient
                 .Select(p => $"{HttpUtility.UrlEncode(p.Key)}={HttpUtility.UrlEncode(p.Value + "")}"));
 
         // HashedRequestPayload。RequestBody经过Hash摘要处理后再进行Base16编码得到HashedRequestPayload，并将RequestHeader中x-acs-content-sha256的值更新为HashedRequestPayload的值。
-        var body = request.Method != HttpMethod.Post ? null : request.Content?.ReadAsByteArrayAsync().Result;
+        // 使用 GetAwaiter().GetResult() 而非 .Result 以避免 AggregateException 包装，提升异常诊断体验
+        var body = request.Method != HttpMethod.Post ? null : request.Content?.ReadAsByteArrayAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         body ??= _empty;
         var hashedRequestPayload = body.SHA256().ToHex("").ToLowerInvariant();
         request.Headers.Add("x-acs-content-sha256", hashedRequestPayload);
