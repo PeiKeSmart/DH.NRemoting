@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
-    <PackageReference Include="DH.NCore" Version="4.24.2026.707-beta1312" />
+    <PackageReference Include="DH.NCore" Version="4.24.2026.714-beta1242" />
   </ItemGroup>
 
   <ItemGroup>
