@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
@@ -16,7 +16,6 @@ using NewLife.Remoting.Models;
 using NewLife.Remoting.Services;
 using NewLife.Web;
 using Xunit;
-
 using MvcControllerContext = Microsoft.AspNetCore.Mvc.ControllerContext;
 
 namespace XUnitTest.Extensions.Controllers;
