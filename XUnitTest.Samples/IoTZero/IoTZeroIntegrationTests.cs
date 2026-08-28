@@ -1,4 +1,5 @@
 ﻿extern alias IoTZero;
+
 using System.Text.Json;
 using IoTZero::IoT.Data;
 using IoTZero::IoTEdge;
@@ -39,11 +40,11 @@ public class IoTZeroIntegrationTests : IClassFixture<IoTZeroWebFactory>
         DeviceOnline.Delete("1=1");
         DeviceHistory.Delete("1=1");
 
-        var client = _factory.TestClient;
+        var client  = _factory.TestClient;
         var setting = _factory.TestSetting;
 
         // 确保以空 DeviceCode/DeviceSecret 开始，触发服务端自动注册
-        setting.DeviceCode = null!;
+        setting.DeviceCode   = null!;
         setting.DeviceSecret = null!;
 
         await client.Login(null, CancellationToken.None).ConfigureAwait(false);
@@ -52,7 +53,7 @@ public class IoTZeroIntegrationTests : IClassFixture<IoTZeroWebFactory>
         Assert.True(client.Logined, "Login 后 Logined 应为 true");
 
         // 服务端应已写回 DeviceCode 和 DeviceSecret（通过 IClientSetting.Code/Secret 接口）
-        Assert.False(setting.DeviceCode.IsNullOrEmpty(), "服务端应已回填 DeviceCode");
+        Assert.False(setting.DeviceCode.IsNullOrEmpty(),   "服务端应已回填 DeviceCode");
         Assert.False(setting.DeviceSecret.IsNullOrEmpty(), "服务端应已回填 DeviceSecret");
 
         XTrace.WriteLine("自动注册成功，DeviceCode={0}", setting.DeviceCode);
@@ -63,7 +64,7 @@ public class IoTZeroIntegrationTests : IClassFixture<IoTZeroWebFactory>
         // 配置文件持久化验证（ClientSetting 的 [Config("IoTClient")] 写到 config/IoTClient.config）
         var configContent = _factory.ReadClientConfigFile();
         Assert.False(configContent.IsNullOrEmpty(), "config/IoTClient.config 应已写入磁盘");
-        Assert.Contains(setting.DeviceCode, configContent!, StringComparison.Ordinal);
+        Assert.Contains(setting.DeviceCode,   configContent!, StringComparison.Ordinal);
         Assert.Contains(setting.DeviceSecret, configContent!, StringComparison.Ordinal);
 
         XTrace.WriteLine("配置文件已写入，内容长度={0}", configContent!.Length);
@@ -126,7 +127,7 @@ public class IoTZeroIntegrationTests : IClassFixture<IoTZeroWebFactory>
     {
         XTrace.WriteLine("=== Step 3: 注销 ===");
 
-        var client = _factory.TestClient;
+        var client   = _factory.TestClient;
         var deviceId = _factory.TestDeviceId;
 
         await client.Logout("集成测试注销", CancellationToken.None).ConfigureAwait(false);
@@ -136,14 +137,10 @@ public class IoTZeroIntegrationTests : IClassFixture<IoTZeroWebFactory>
         // 等待服务端写库
         await Task.Delay(500).ConfigureAwait(false);
 
-        // DeviceOnline 应已清除（直接查 DB，绕过实体缓存）
+        // DeviceOnline 应已结算但未被删除（LoginTime=MinValue）
         var onlines = DeviceOnline.FindAll(DeviceOnline._.DeviceId == deviceId, null, null, 0, 0);
-        if (onlines.Count > 0)
-        {
-            foreach (var o in onlines)
-                XTrace.WriteLine("残留 DeviceOnline: Id={0}, DeviceId={1}, SessionId={2}, UpdateTime={3}", o.Id, o.DeviceId, o.SessionId, o.UpdateTime);
-        }
-        Assert.True(onlines.Count == 0, $"DeviceOnline 应已清除，但有 {onlines.Count} 条记录，SessionIds=[{String.Join(",", onlines.Select(o => o.SessionId))}]");
+        Assert.NotEmpty(onlines);
+        Assert.All(onlines, o => Assert.True(o.LoginTime.Year <= 2000, $"LoginTime应为MinValue，实际={o.LoginTime}"));
 
         // DeviceHistory 应有下线记录（WriteHistory 使用 EntityQueue 异步写库，需轮询等待）
         var logouts = await WaitForDeviceHistory(deviceId, "Http设备下线").ConfigureAwait(false);
@@ -159,9 +156,9 @@ public class IoTZeroIntegrationTests : IClassFixture<IoTZeroWebFactory>
     {
         XTrace.WriteLine("=== Step 4: 修改密钥后重登 ===");
 
-        var client = _factory.TestClient;
-        var setting = _factory.TestSetting;
-        var code = _factory.TestCode;
+        var client   = _factory.TestClient;
+        var setting  = _factory.TestSetting;
+        var code     = _factory.TestCode;
         var deviceId = _factory.TestDeviceId;
 
         // 在服务端直接修改 Device.Secret（模拟运维修改密钥场景）
@@ -199,12 +196,12 @@ public class IoTZeroIntegrationTests : IClassFixture<IoTZeroWebFactory>
     {
         XTrace.WriteLine("=== Step 5: 心跳 ===");
 
-        var client = _factory.TestClient;
+        var client   = _factory.TestClient;
         var deviceId = _factory.TestDeviceId;
 
         // 记录心跳前的 Pings（DeviceOnline 的 AdditionalFields 有 Pings 累加字段）
         var onlineBefore = DeviceOnline.Find(DeviceOnline._.DeviceId == deviceId);
-        var pingsBefore = onlineBefore?.Pings ?? 0;
+        var pingsBefore  = onlineBefore?.Pings ?? 0;
 
         var rs = await client.Ping(CancellationToken.None).ConfigureAwait(false);
         Assert.NotNull(rs);
@@ -231,20 +228,20 @@ public class IoTZeroIntegrationTests : IClassFixture<IoTZeroWebFactory>
         var deviceId = _factory.TestDeviceId;
 
         // HttpDevice 登录后会自动建立 WebSocket 通知连接（Features 包含 Notify）
-        // 轮询最长 5 秒等待 DeviceOnline.WebSocket = true
+        // 轮询最长 5 秒等待 DeviceOnline.LongLink = true
         var deadline = DateTime.Now.AddSeconds(5);
         DeviceOnline? online = null;
         while (DateTime.Now < deadline)
         {
             online = DeviceOnline.Find(DeviceOnline._.DeviceId == deviceId);
-            if (online?.WebSocket == true) break;
+            if (online?.LongLink == true) break;
             await Task.Delay(200).ConfigureAwait(false);
         }
 
         Assert.NotNull(online);
-        Assert.True(online.WebSocket, "DeviceOnline.WebSocket 应在 5 秒内变为 true");
+        Assert.True(online.LongLink, "DeviceOnline.LongLink 应在 5 秒内变为 true");
 
-        XTrace.WriteLine("WebSocket 已建立，SessionId={0}", online.SessionId);
+        XTrace.WriteLine("LongLink 已建立，SessionId={0}", online.SessionId);
     }
     #endregion
 
@@ -255,7 +252,7 @@ public class IoTZeroIntegrationTests : IClassFixture<IoTZeroWebFactory>
         XTrace.WriteLine("=== Step 7: SendCommand 投递 ===");
 
         var client = _factory.TestClient;
-        var code = _factory.TestCode;
+        var code   = _factory.TestCode;
 
         var tcs = new TaskCompletionSource<CommandEventArgs>(TaskCreationOptions.RunContinuationsAsynchronously);
 
@@ -274,10 +271,10 @@ public class IoTZeroIntegrationTests : IClassFixture<IoTZeroWebFactory>
             http.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {deviceToken}");
         var payload = JsonSerializer.Serialize(new
         {
-            Code = code,
-            Command = "test:echo",
+            Code     = code,
+            Command  = "test:echo",
             Argument = "hello",
-            Timeout = 0,
+            Timeout  = 0,
         });
         var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
 
@@ -290,7 +287,7 @@ public class IoTZeroIntegrationTests : IClassFixture<IoTZeroWebFactory>
 
         Assert.NotNull(cmdEvt.Model);
         Assert.Equal("test:echo", cmdEvt.Model!.Command);
-        Assert.Equal("hello", cmdEvt.Model.Argument);
+        Assert.Equal("hello",     cmdEvt.Model.Argument);
 
         XTrace.WriteLine("已收到命令，Command={0}, Argument={1}", cmdEvt.Model.Command, cmdEvt.Model.Argument);
     }

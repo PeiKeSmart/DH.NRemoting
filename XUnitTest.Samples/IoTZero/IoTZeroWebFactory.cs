@@ -1,4 +1,5 @@
-﻿extern alias IoTZero;
+extern alias IoTZero;
+
 using IoTZero::IoT.Data;
 using IoTZero::IoTEdge;
 using Microsoft.AspNetCore.Hosting;
@@ -55,18 +56,18 @@ public sealed class IoTZeroWebFactory : WebApplicationFactory<IoTZero::Program>,
         builder.UseEnvironment("Testing");
 
         // 覆盖连接串为临时 SQLite 文件，每次测试数据完全隔离
-        var dbIoT = $"Data Source={Path.Combine(TempDir, "Data", "IoT.db")};Provider=Sqlite";
-        var dbIoTData = $"Data Source={Path.Combine(TempDir, "Data", "IoTData.db")};ShowSql=false;Provider=Sqlite";
+        var dbIoT        = $"Data Source={Path.Combine(TempDir, "Data", "IoT.db")};Provider=Sqlite";
+        var dbIoTData    = $"Data Source={Path.Combine(TempDir, "Data", "IoTData.db")};ShowSql=false;Provider=Sqlite";
         var dbMembership = $"Data Source={Path.Combine(TempDir, "Data", "Membership.db")};Provider=Sqlite";
 
         builder.ConfigureAppConfiguration((_, cfg) =>
         {
             cfg.AddInMemoryCollection(new Dictionary<String, String?>
             {
-                ["ConnectionStrings:IoT"] = dbIoT,
-                ["ConnectionStrings:IoTData"] = dbIoTData,
+                ["ConnectionStrings:IoT"]        = dbIoT,
+                ["ConnectionStrings:IoTData"]    = dbIoTData,
                 ["ConnectionStrings:Membership"] = dbMembership,
-                ["XCodeSetting:ShowSQL"] = "false",
+                ["XCodeSetting:ShowSQL"]         = "false",
             });
         });
     }
@@ -91,7 +92,7 @@ public sealed class IoTZeroWebFactory : WebApplicationFactory<IoTZero::Program>,
         SeedProduct();
         // 初始化共享测试状态：创建客户端（Step1 时以空 DeviceCode/DeviceSecret 触发自动注册）
         TestSetting = new ClientSetting { Server = BaseUrl };
-        TestClient = new HttpDevice(TestSetting) { Log = XTrace.Log };
+        TestClient  = new HttpDevice(TestSetting) { Log = XTrace.Log };
         await Task.CompletedTask;
     }
 
@@ -142,8 +143,8 @@ public sealed class IoTZeroWebFactory : WebApplicationFactory<IoTZero::Program>,
         {
             product = new Product
             {
-                Code = "EdgeGateway",
-                Name = "边缘网关（集成测试）",
+                Code   = "EdgeGateway",
+                Name   = "边缘网关（集成测试）",
                 Enable = true,
             };
             product.Insert();

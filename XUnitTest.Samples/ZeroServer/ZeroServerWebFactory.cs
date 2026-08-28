@@ -1,4 +1,5 @@
-﻿extern alias ZeroServer;
+extern alias ZeroServer;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
@@ -56,21 +57,21 @@ public sealed class ZeroServerWebFactory : WebApplicationFactory<ZeroServer::Pro
         // 覆盖连接串为临时 SQLite 文件，每次测试数据完全隔离
         // ZeroServer 实体 ConnName 映射：Node→"Zero"，NodeOnline/NodeHistory→"StardustData"，Area→"Membership"
         // 同时覆盖 "IoT"，防止 EntityFactory.InitAll() 用 appsettings.json 的相对路径初始化 IoTZero 的实体连接
-        var dataDir = Path.Combine(TempDir, "Data");
-        var dbZero = $"Data Source={Path.Combine(dataDir, "Zero.db")};Provider=Sqlite";
-        var dbStardust = $"Data Source={Path.Combine(dataDir, "StardustData.db")};Provider=Sqlite";
+        var dataDir      = Path.Combine(TempDir, "Data");
+        var dbZero       = $"Data Source={Path.Combine(dataDir, "Zero.db")};Provider=Sqlite";
+        var dbStardust   = $"Data Source={Path.Combine(dataDir, "StardustData.db")};Provider=Sqlite";
         var dbMembership = $"Data Source={Path.Combine(dataDir, "Membership.db")};Provider=Sqlite";
-        var dbIoT = $"Data Source={Path.Combine(dataDir, "IoT.db")};Provider=Sqlite";
+        var dbIoT        = $"Data Source={Path.Combine(dataDir, "IoT.db")};Provider=Sqlite";
 
         builder.ConfigureAppConfiguration((_, cfg) =>
         {
             cfg.AddInMemoryCollection(new Dictionary<String, String?>
             {
-                ["ConnectionStrings:Zero"] = dbZero,
+                ["ConnectionStrings:Zero"]        = dbZero,
                 ["ConnectionStrings:StardustData"] = dbStardust,
-                ["ConnectionStrings:Membership"] = dbMembership,
-                ["ConnectionStrings:IoT"] = dbIoT,
-                ["XCodeSetting:ShowSQL"] = "false",
+                ["ConnectionStrings:Membership"]  = dbMembership,
+                ["ConnectionStrings:IoT"]         = dbIoT,
+                ["XCodeSetting:ShowSQL"]          = "false",
             });
         });
     }
@@ -90,7 +91,7 @@ public sealed class ZeroServerWebFactory : WebApplicationFactory<ZeroServer::Pro
 
         // 初始化共享测试状态：创建客户端（Step1 时以空 Code/Secret 触发自动注册）
         TestSetting = new ClientSetting { Server = BaseUrl };
-        TestClient = new NodeClient(TestSetting) { Log = XTrace.Log };
+        TestClient  = new NodeClient(TestSetting) { Log = XTrace.Log };
 
         await Task.CompletedTask;
     }

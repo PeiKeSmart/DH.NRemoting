@@ -1,4 +1,5 @@
 ﻿extern alias ZeroServer;
+
 using System.Text.Json;
 using NewLife;
 using NewLife.Log;
@@ -39,11 +40,11 @@ public class ZeroServerIntegrationTests : IClassFixture<ZeroServerWebFactory>
         NodeOnline.Delete("1=1");
         NodeHistory.Delete("1=1");
 
-        var client = _factory.TestClient;
+        var client  = _factory.TestClient;
         var setting = _factory.TestSetting;
 
         // 确保以空 Code/Secret 开始，触发服务端自动注册
-        setting.Code = null!;
+        setting.Code   = null!;
         setting.Secret = null!;
 
         await client.Login(null, CancellationToken.None);
@@ -52,7 +53,7 @@ public class ZeroServerIntegrationTests : IClassFixture<ZeroServerWebFactory>
         Assert.True(client.Logined, "Login 后 Logined 应为 true");
 
         // 服务端应已写回 Code 和 Secret
-        Assert.False(setting.Code.IsNullOrEmpty(), "服务端应已回填 Code");
+        Assert.False(setting.Code.IsNullOrEmpty(),   "服务端应已回填 Code");
         Assert.False(setting.Secret.IsNullOrEmpty(), "服务端应已回填 Secret");
 
         XTrace.WriteLine("自动注册成功，Code={0}", setting.Code);
@@ -63,7 +64,7 @@ public class ZeroServerIntegrationTests : IClassFixture<ZeroServerWebFactory>
         // 配置文件持久化验证
         var configContent = _factory.ReadClientConfigFile();
         Assert.False(configContent.IsNullOrEmpty(), "config/ZeroClient.config 应已写入磁盘");
-        Assert.Contains(setting.Code, configContent!, StringComparison.Ordinal);
+        Assert.Contains(setting.Code,   configContent!, StringComparison.Ordinal);
         Assert.Contains(setting.Secret, configContent!, StringComparison.Ordinal);
 
         XTrace.WriteLine("配置文件已写入，内容长度={0}", configContent!.Length);
@@ -124,9 +125,10 @@ public class ZeroServerIntegrationTests : IClassFixture<ZeroServerWebFactory>
 
         Assert.False(client.Logined, "Logout 后 Logined 应为 false");
 
-        // 轮询等待 NodeOnline 被删除
-        var emptyOnlines = await WaitForNodeOnlineEmpty(nodeId);
-        Assert.Empty(emptyOnlines);
+        // 轮询等待 NodeOnline 被结算（LoginTime=MinValue，不删库）
+        var onlineRecords = await WaitForNodeOnlineSettled(nodeId);
+        Assert.NotEmpty(onlineRecords);
+        Assert.All(onlineRecords, o => Assert.True(o.LoginTime.Year <= 2000, $"LoginTime应为MinValue，实际={o.LoginTime}"));
 
         // NodeHistory 下线记录由 EntityQueue 异步写入，需轮询等待
         var logouts = await WaitForNodeHistory(nodeId, "Http设备下线");
@@ -142,10 +144,10 @@ public class ZeroServerIntegrationTests : IClassFixture<ZeroServerWebFactory>
     {
         XTrace.WriteLine("=== Step 4: 修改密钥后重登 ===");
 
-        var client = _factory.TestClient;
+        var client  = _factory.TestClient;
         var setting = _factory.TestSetting;
-        var code = _factory.TestCode;
-        var nodeId = _factory.TestNodeId;
+        var code    = _factory.TestCode;
+        var nodeId  = _factory.TestNodeId;
 
         // 在服务端直接修改 Node.Secret（模拟运维修改密钥场景）
         var node = Node.FindByCodeWithCache(code, false)!;
@@ -183,7 +185,7 @@ public class ZeroServerIntegrationTests : IClassFixture<ZeroServerWebFactory>
         var nodeId = _factory.TestNodeId;
 
         // 记录心跳前的 PingCount
-        var onlineBefore = NodeOnline.FindByNodeId(nodeId);
+        var onlineBefore    = NodeOnline.FindByNodeId(nodeId);
         var pingCountBefore = onlineBefore?.PingCount ?? 0;
 
         var rs = await client.Ping(CancellationToken.None);
@@ -211,20 +213,20 @@ public class ZeroServerIntegrationTests : IClassFixture<ZeroServerWebFactory>
         var nodeId = _factory.TestNodeId;
 
         // NodeClient 登录后会自动建立 WebSocket 通知连接
-        // 轮询最长 5 秒等待 NodeOnline.WebSocket = true
+        // 轮询最长 5 秒等待 NodeOnline.LongLink = true
         var deadline = DateTime.Now.AddSeconds(5);
         NodeOnline? online = null;
         while (DateTime.Now < deadline)
         {
             online = NodeOnline.Find(NodeOnline._.NodeId == nodeId);
-            if (online?.WebSocket == true) break;
+            if (online?.LongLink == true) break;
             await Task.Delay(200);
         }
 
         Assert.NotNull(online);
-        Assert.True(online.WebSocket, "NodeOnline.WebSocket 应在 5 秒内变为 true");
+        Assert.True(online.LongLink, "NodeOnline.LongLink 应在 5 秒内变为 true");
 
-        XTrace.WriteLine("WebSocket 已建立，SessionId={0}", online.SessionId);
+        XTrace.WriteLine("LongLink 已建立，SessionId={0}", online.SessionId);
     }
     #endregion
 
@@ -235,7 +237,7 @@ public class ZeroServerIntegrationTests : IClassFixture<ZeroServerWebFactory>
         XTrace.WriteLine("=== Step 7: SendCommand + CommandReply ===");
 
         var client = _factory.TestClient;
-        var code = _factory.TestCode;
+        var code   = _factory.TestCode;
 
         var tcs = new TaskCompletionSource<CommandEventArgs>(TaskCreationOptions.RunContinuationsAsynchronously);
 
@@ -251,10 +253,10 @@ public class ZeroServerIntegrationTests : IClassFixture<ZeroServerWebFactory>
             http.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {deviceToken}");
         var payload = JsonSerializer.Serialize(new
         {
-            Code = code,
-            Command = "test:echo",
+            Code     = code,
+            Command  = "test:echo",
             Argument = "hello",
-            Timeout = 10,
+            Timeout  = 10,
         });
         var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
 
@@ -266,7 +268,7 @@ public class ZeroServerIntegrationTests : IClassFixture<ZeroServerWebFactory>
 
         Assert.NotNull(cmdEvt.Model);
         Assert.Equal("test:echo", cmdEvt.Model!.Command);
-        Assert.Equal("hello", cmdEvt.Model.Argument);
+        Assert.Equal("hello",     cmdEvt.Model.Argument);
 
         XTrace.WriteLine("已收到命令，Command={0}, Argument={1}", cmdEvt.Model.Command, cmdEvt.Model.Argument);
     }
@@ -333,16 +335,17 @@ public class ZeroServerIntegrationTests : IClassFixture<ZeroServerWebFactory>
     /// <summary>轮询等待 NodeOnline 对应 nodeId 的记录全部消失</summary>
     /// <param name="nodeId">节点 ID</param>
     /// <returns>查到的剩余记录（超时后返回当时状态）</returns>
-    private static async Task<IList<NodeOnline>> WaitForNodeOnlineEmpty(Int32 nodeId)
+    private static async Task<IList<NodeOnline>> WaitForNodeOnlineSettled(Int32 nodeId)
     {
         var deadline = DateTime.Now.AddSeconds(5);
         while (DateTime.Now < deadline)
         {
-            var list = NodeOnline.FindAll(NodeOnline._.NodeId == nodeId);
-            if (list.Count == 0) return list;
+            // 绕过实体缓存直接查库，获取最新的 LoginTime 状态
+            var list = NodeOnline.FindAll(NodeOnline._.NodeId == nodeId, null, null, 0, 0);
+            if (list.Count > 0 && list.All(o => o.LoginTime.Year <= 2000)) return list;
             await Task.Delay(200);
         }
-        return NodeOnline.FindAll(NodeOnline._.NodeId == nodeId);
+        return NodeOnline.FindAll(NodeOnline._.NodeId == nodeId, null, null, 0, 0);
     }
     #endregion
 }
