@@ -17,9 +17,9 @@ public partial class NodeHistory : Entity<NodeHistory>
     {
         Meta.Table.DataTable.InsertOnly = true;
 
-        Meta.Modules.Add<TimeModule>();
-        Meta.Modules.Add<IPModule>();
-        Meta.Modules.Add<TraceModule>();
+        Meta.Interceptors.Add<TimeInterceptor>();
+        Meta.Interceptors.Add<IPInterceptor>();
+        Meta.Interceptors.Add<TraceInterceptor>();
     }
 
     /// <summary>插入或修改时</summary>

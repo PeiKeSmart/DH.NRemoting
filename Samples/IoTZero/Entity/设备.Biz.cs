@@ -23,10 +23,10 @@ public partial class Device : Entity<Device>, IDeviceModel2, ILogProvider
         df.Add(nameof(Logins));
         df.Add(nameof(OnlineTime));
 
-        // 过滤器 UserModule、TimeModule、IPModule
-        Meta.Modules.Add<UserModule>();
-        Meta.Modules.Add<TimeModule>();
-        Meta.Modules.Add<IPModule>();
+        // 过滤器 UserInterceptor、TimeInterceptor、IPInterceptor
+        Meta.Interceptors.Add<UserInterceptor>();
+        Meta.Interceptors.Add<TimeInterceptor>();
+        Meta.Interceptors.Add<IPInterceptor>();
 
         var sc = Meta.SingleCache;
         sc.Expire = 20 * 60;
